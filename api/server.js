@@ -10,6 +10,7 @@ app.use(express.json());
 app.use(express.static('public'));
 
 const users = require('./app/users');
+const places = require('./app/places');
 
 mongoose.connect(config.db.url + '/' + config.db.name, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
 const db = mongoose.connection;
@@ -19,7 +20,7 @@ db.once('open', () => {
     console.log('Mongoose connected!');
 
     app.use('/users', users());
-    // app.use('/images', images());
+    app.use('/places', places());
     // app.use('/places', places());
     // app.use('/reviews', reviews());
 
