@@ -38,13 +38,35 @@ const loginUser = async (req, res) => {
     }
 }
 
+const logoutUser = async (req, res) => {
+    try {
+        const token = req.get('Token');
+        const success = {message: 'Logout success!'};
+
+        if (!token) return res.send(success);
+
+        const user = await User.findOne({token});
+
+        if (!user) return res.send(success);
+
+        user.generateToken();
+        await user.save();
+
+        return res.send(success);
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 
 const createRouter = () => {
     const router = express.Router();
 
     router.post('/', registerUser);
 
-    router.get('/sessions', loginUser);
+    router.post('/sessions', loginUser);
+
+    router.delete('/sessions', logoutUser)
 
     return router;
 };
